@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Image</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .fullscreen-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+
+            background-image: url("assets/background.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        #blue-line-box {
+            position: fixed;
+            top: 50.3%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 45px;
+            background-color: #00000000; /* Change this to your desired color */
+            z-index: 9999; /* Ensure it's on top of other elements */
+            overflow: hidden; /* Hide any overflow */
+        }
+
+        #blue-line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(14deg); /* Rotate the line to be vertical */
+            width: 1.5px; /* Change this to your desired width */
+            height: 100px; /* Change this to your desired height */
+            background-color: #388ca8; /* Change this to your desired color */
+            animation-name: myAnimation;
+            animation-duration: 3s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        @keyframes myAnimation {
+            from {transform: translate(-60px, -50%) rotate(14deg);}
+            to {transform: translate(60px, -50%) rotate(14deg);}
+        }
+
+
+    </style>
+</head>
+
+<body>
+
+    <div class="fullscreen-image"></div>
+    <div id="blue-line-box"><div id="blue-line"></div></div>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+.sc-dock, .sc-dock * { box-sizing: border-box; }
+.sc-dock {
+  --sc-blue: #2b8cc4; --sc-sheet: #f8f8f8; --sc-tabbar: #ffffff;
+  --sc-text: #2b2b2b; --sc-muted: #777b80; --sc-line: rgba(0,0,0,.08);
+  --sc-grip: #cfd2d5; --sc-icon: #8a8d91;
+  --sc-max: 430px;               /* max width of the bar and sheet */
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 1000;
+  max-width: var(--sc-max); margin: 0 auto;
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--sc-text); -webkit-tap-highlight-color: transparent;
+}
+/* add data-theme="light" to the .sc-dock element for the light version */
+.sc-dock[data-theme="light"] {
+  --sc-sheet: #f8f8f8; --sc-tabbar: #ffffff; --sc-text: #2b2b2b;
+  --sc-muted: #777b80; --sc-line: rgba(0,0,0,.08); --sc-grip: #cfd2d5; --sc-icon: #8a8d91;
+}
+.sc-dock p, .sc-dock h2, .sc-dock ul { margin: 0; padding: 0; }
+
+/* ---------- draggable sheet ---------- */
+.sc-sheet {
+  position: absolute; left: 0; right: 0; bottom: 100%; z-index: 0;
+  height: 64vh; height: min(64dvh, 520px); min-height: 270px;
+  display: flex; flex-direction: column;
+  background: var(--sc-sheet); border-radius: 30px 30px 0 0;
+  box-shadow: 0 60px 0 var(--sc-sheet), 0 -6px 24px rgba(0,0,0,.1);
+  transform: translateY(calc(100% - 92px));
+  transition: transform .4s cubic-bezier(.22, 1, .36, 1);
+  will-change: transform;
+}
+.sc-sheet.sc-dragging { transition: none; }
+.sc-head { flex: none; padding: 12px 18px 14px; cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; }
+.sc-sheet.sc-dragging .sc-head { cursor: grabbing; }
+.sc-grip {
+  width: 52px; height: 18px; margin: 0 auto 6px; border-radius: 9px; outline-offset: 2px;
+  background: linear-gradient(var(--sc-grip), var(--sc-grip)) center / 100% 6px no-repeat;
+}
+.sc-grip:focus-visible { outline: 2px solid var(--sc-blue); }
+.sc-used { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.sc-label { font-size: 15px; font-weight: 400; color: var(--sc-muted); line-height: 1.4; }
+.sc-place { font-size: 17px; font-weight: 600; line-height: 1.4; }
+.sc-used time { font-size: 16px; color: var(--sc-muted); line-height: 1.5; }
+
+.sc-history { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 4px 18px 20px; }
+.sc-history h2 { margin: 6px 0 4px; font-size: 15px; font-weight: 500; color: var(--sc-muted); }
+.sc-history ul { list-style: none; }
+.sc-history li { display: flex; justify-content: space-between; gap: 12px; padding: 13px 0; border-top: 1px solid var(--sc-line); font-size: 16px; }
+.sc-history li span:last-child { color: var(--sc-muted); }
+
+/* ---------- tab bar ---------- */
+.sc-tabbar {
+  position: relative; z-index: 1;
+  height: calc(72px + env(safe-area-inset-bottom, 0px)); padding-top: 14px;
+  background: var(--sc-tabbar); border-top: 1px solid var(--sc-line);
+  display: grid; grid-template-columns: repeat(4, 1fr);
+}
+.sc-tab {
+  position: relative; display: flex; justify-content: center; align-items: flex-start;
+  height: 40px; padding: 0; background: none; border: 0; color: var(--sc-icon); cursor: pointer;
+}
+.sc-tab svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.sc-tab[aria-current="page"] { color: var(--sc-blue); }
+.sc-tab[aria-current="page"]::after {
+  content: ""; position: absolute; left: 50%; top: 38px; width: 28px; height: 4px; margin-left: -14px;
+  border-radius: 2px; background: var(--sc-blue);
+}
+.sc-tab:focus-visible { outline: 2px solid var(--sc-blue); outline-offset: -4px; border-radius: 12px; }
+
+@media (prefers-reduced-motion: reduce) { .sc-sheet { transition: none; } }
+</style>
+
+<div class="sc-dock">
+  <section class="sc-sheet" aria-label="Brugshistorik">
+    <div class="sc-head">
+      <div class="sc-grip" role="button" tabindex="0" aria-expanded="false" aria-label="Vis tidligere brug"></div>
+      <div class="sc-used">
+        <div>
+          <p class="sc-label">Studiekort anvendt hos:</p>
+          <p class="sc-place">Munkensdam Gymnasium</p>
+        </div>
+        <time>01/01/2026</time>
+      </div>
+    </div>
+    <div class="sc-history">
+      <!--<h2>Tidligere brug / Earlier use</h2>
+      <ul>
+        <li><span>Example Library</span><span>19/12/2025</span></li>
+        <li><span>Example Gymnasium</span><span>17/12/2025</span></li>
+        <li><span>Campus Café</span><span>12/12/2025</span></li>
+        <li><span>Example Gymnasium</span><span>10/12/2025</span></li>
+        <li><span>Example Library</span><span>03/12/2025</span></li>
+      </ul>
+    </div>-->
+  </section>
+
+  <nav class="sc-tabbar" aria-label="Main">
+    <button class="sc-tab" aria-label="Tilbud">
+      <svg viewBox="0 0 30 30"><path d="M16.5 4.5h7a2 2 0 0 1 2 2v7a2 2 0 0 1-.6 1.4l-9.4 9.4a2 2 0 0 1-2.8 0l-6.9-6.9a2 2 0 0 1 0-2.8l9.4-9.4a2 2 0 0 1 1.3-.7z"/><circle cx="20.5" cy="9.5" r="1.6"/></svg>
+    </button>
+    <button class="sc-tab" aria-label="Studiekort" aria-current="page">
+      <svg viewBox="0 0 30 30"><rect x="4.5" y="4.5" width="21" height="21" rx="5"/><circle cx="15" cy="12.5" r="3.4"/><path d="M8.5 22.5c1-3.2 3.7-4.7 6.5-4.7s5.5 1.5 6.5 4.7"/></svg>
+    </button>
+    <button class="sc-tab" aria-label="Apps">
+      <svg viewBox="0 0 30 30"><rect x="5" y="5" width="8.5" height="8.5" rx="2.6"/><rect x="16.5" y="5" width="8.5" height="8.5" rx="2.6"/><rect x="5" y="16.5" width="8.5" height="8.5" rx="2.6"/><rect x="16.5" y="16.5" width="8.5" height="8.5" rx="2.6"/></svg>
+    </button>
+    <button class="sc-tab" aria-label="Mere">
+      <svg viewBox="0 0 30 30"><circle cx="6.5" cy="15" r="1.8"/><circle cx="15" cy="15" r="1.8"/><circle cx="23.5" cy="15" r="1.8"/></svg>
+    </button>
+  </nav>
+</div>
+
+<script>
+(function () {
+  const dock = document.querySelector(".sc-dock");
+  if (!dock) return;
+  const sheet = dock.querySelector(".sc-sheet");
+  const head  = dock.querySelector(".sc-head");
+  const grip  = dock.querySelector(".sc-grip");
+  const list  = dock.querySelector(".sc-history");
+
+  /* Tab bar: visual selection only. Hook your own navigation in here. */
+  const tabs = dock.querySelectorAll(".sc-tab");
+  tabs.forEach((tab) => tab.addEventListener("click", () => {
+    tabs.forEach((t) => t.removeAttribute("aria-current"));
+    tab.setAttribute("aria-current", "page");
+  }));
+
+  /* Draggable sheet */
+  let collapsedY = 0, y = 0, open = false;
+  let dragging = false, startY = 0, startPos = 0, lastY = 0, lastT = 0, vel = 0, moved = 0;
+
+  const measure = () => { collapsedY = Math.max(0, sheet.offsetHeight - head.offsetHeight); };
+  const place = (v) => { y = v; sheet.style.transform = "translateY(" + v + "px)"; };
+  function snap(toOpen) {
+    open = toOpen;
+    sheet.style.transition = "";
+    place(open ? 0 : collapsedY);
+    grip.setAttribute("aria-expanded", String(open));
+    grip.setAttribute("aria-label", open ? "Skjul tidligere brug" : "Vis tidligere brug");
+    if (!open) list.scrollTop = 0;
+  }
+
+  head.addEventListener("pointerdown", (e) => {
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    dragging = true; moved = 0; vel = 0;
+    startY = lastY = e.clientY; startPos = y; lastT = e.timeStamp;
+    head.setPointerCapture(e.pointerId);
+    sheet.classList.add("sc-dragging");
+  });
+  head.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
+    const dy = e.clientY - startY;
+    moved = Math.max(moved, Math.abs(dy));
+    let v = startPos + dy;
+    if (v < 0) v *= 0.25;                                              /* rubber band at the top */
+    else if (v > collapsedY) v = collapsedY + (v - collapsedY) * 0.25; /* and at the bottom */
+    const dt = e.timeStamp - lastT;
+    if (dt > 0) vel = 0.8 * vel + 0.2 * ((e.clientY - lastY) / dt);
+    lastY = e.clientY; lastT = e.timeStamp;
+    place(v);
+  });
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    sheet.classList.remove("sc-dragging");
+    if (moved < 6) return snap(!open);                /* a tap toggles */
+    if (Math.abs(vel) > 0.4) return snap(vel < 0);    /* a flick decides direction */
+    snap(y < collapsedY / 2);                         /* otherwise nearest snap point */
+  }
+  head.addEventListener("pointerup", endDrag);
+  head.addEventListener("pointercancel", endDrag);
+
+  grip.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); snap(!open); }
+  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && open) snap(false); });
+
+  function layout() {
+    measure();
+    sheet.style.transition = "none";
+    place(open ? 0 : collapsedY);
+    requestAnimationFrame(() => { sheet.style.transition = ""; });
+  }
+  new ResizeObserver(layout).observe(sheet);
+  new ResizeObserver(layout).observe(head);
+  layout();
+})();
+</script>
+
+
+</body>
+</html>
